@@ -1,6 +1,6 @@
 {
-  "name": "incident-reporting-app",
-  "version": "0.1.0",
+  "name": "ir-app-opalquality",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -25,5 +25,10 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.2",
     "tailwindcss": "^4"
-  }
+  },
+  "description": "Incident Reporting App for Opal Quality",
+  "repository": {
+    "url": "https://github.com/sanwalbajwa/ir-app-opalquality.git"
+  },
+  "homepage": "https://github.com/sanwalbajwa/ir-app-opalquality"
 }

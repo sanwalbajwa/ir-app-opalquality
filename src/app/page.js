@@ -194,49 +194,6 @@ export default function Home() {
             </p>
           </div>
         </div>
-
-        {/* Role-based Dashboard Preview */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-8 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Dashboard Access by Role</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            
-            {/* Guard Dashboard */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
-              <div className="w-12 h-12 bg-gradient-to-br from-gray-500 to-gray-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <UserCheck className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="font-bold text-gray-900 mb-2">Security Guard</h4>
-              <p className="text-sm text-gray-600">Report incidents, manage shifts, view assignments</p>
-            </div>
-
-            {/* Rover Dashboard */}
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <UserCheck className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="font-bold text-green-900 mb-2">Rover</h4>
-              <p className="text-sm text-green-700">Mobile security, report incidents, manage shifts</p>
-            </div>
-
-            {/* Supervisor Dashboard
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="font-bold text-purple-900 mb-2">Security Supervisor</h4>
-              <p className="text-sm text-purple-700">Manage guards, review reports, oversee operations</p>
-            </div> */}
-
-            {/* Management Dashboard */}
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Crown className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="font-bold text-blue-900 mb-2">Management</h4>
-              <p className="text-sm text-blue-700">System overview, analytics, user management</p>
-            </div>
-          </div>
-        </div>
       </div>
     </main>
   )
