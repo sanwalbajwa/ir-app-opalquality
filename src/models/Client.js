@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb'
 export class Client {
   static async create(clientData) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const clients = db.collection('clients')
     
     const newClient = {
@@ -20,7 +20,7 @@ export class Client {
   
   static async findAll() {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const clients = db.collection('clients')
     
     return await clients
@@ -31,7 +31,7 @@ export class Client {
   
   static async findById(id) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const clients = db.collection('clients')
     
     return await clients.findOne({ _id: new ObjectId(id) })

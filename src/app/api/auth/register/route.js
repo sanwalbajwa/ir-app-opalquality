@@ -36,7 +36,7 @@ export async function POST(request) {
 
     // Connect to database
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const securityCodes = db.collection('security_codes')
 
     // Validate security code

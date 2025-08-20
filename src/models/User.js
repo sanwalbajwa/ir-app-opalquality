@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb'
 export class User {
   static async create(userData) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     // Check if email already exists
@@ -41,7 +41,7 @@ export class User {
   
   static async findByEmail(email) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     return await users.findOne({ email: email.toLowerCase() })
@@ -49,7 +49,7 @@ export class User {
   
   static async findByEmployeeId(employeeId) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     return await users.findOne({ employeeId: employeeId.trim() })
@@ -57,7 +57,7 @@ export class User {
   
   static async findById(id) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     return await users.findOne({ _id: new ObjectId(id) })
@@ -65,7 +65,7 @@ export class User {
 
   static async updateLastLogin(userId) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     return await users.updateOne(
@@ -80,7 +80,7 @@ export class User {
   }
   static async updateProfile(userId, profileData) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     return await users.updateOne(
@@ -96,7 +96,7 @@ export class User {
 
   static async updatePassword(userId, hashedPassword) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     return await users.updateOne(
@@ -113,7 +113,7 @@ export class User {
   // Enhanced findById that includes all fields
   static async findByIdComplete(id) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     return await users.findOne({ _id: new ObjectId(id) })
@@ -122,7 +122,7 @@ export class User {
   // Method to get user stats/activity
   static async getUserStats(userId) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     
     // Get incident count
     const incidents = db.collection('incidents')

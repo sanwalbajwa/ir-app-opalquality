@@ -98,7 +98,7 @@ export async function DELETE(request) {
     console.log('Attempting to delete client ID:', clientId)
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     
     // Check if client has active incidents
     const incidents = db.collection('incidents')

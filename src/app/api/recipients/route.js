@@ -14,7 +14,7 @@ export async function GET() {
     }
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     
     // Get all users who can receive messages (excluding guards and maintenance)

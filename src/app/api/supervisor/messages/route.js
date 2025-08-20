@@ -27,7 +27,7 @@ export async function GET(request) {
     const messageType = searchParams.get('type') // 'communication', 'incident', or 'all'
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     // Build query to find messages/incidents sent to this user
@@ -117,7 +117,7 @@ export async function POST(request) {
     
     if (action === 'mark_read') {
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const incidents = db.collection('incidents')
       
       const result = await incidents.updateOne(

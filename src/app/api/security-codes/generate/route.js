@@ -29,7 +29,7 @@ export async function POST(request) {
     }
 
     const client = await clientPromise  // CHANGED: Use clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const securityCodes = db.collection('security_codes')
     
     // Generate unique code

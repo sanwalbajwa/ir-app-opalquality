@@ -23,7 +23,7 @@ export async function GET() {
     }
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     const checkins = db.collection('checkins')
     
@@ -118,7 +118,7 @@ export async function POST(request) {
     }
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     if (action === 'start_shift') {
@@ -246,7 +246,7 @@ export async function DELETE(request) {
     
     // Check if guard has active shift
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     const activeShift = await checkins.findOne({

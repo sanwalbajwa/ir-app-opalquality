@@ -13,7 +13,7 @@ export async function GET() {
     }
 
     const client = await clientPromise  // CHANGED: Use clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const securityCodes = db.collection('security_codes')
     
     const codes = await securityCodes

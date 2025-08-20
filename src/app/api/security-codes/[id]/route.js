@@ -15,7 +15,7 @@ export async function DELETE(request, { params }) {
     const { id } = params
 
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const securityCodes = db.collection('security_codes')
 
     // Check if code exists and is not used

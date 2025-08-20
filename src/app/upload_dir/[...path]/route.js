@@ -30,7 +30,7 @@ export async function GET(request, { params }) {
       
       // Debug: Let's see what files are actually in the database
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const files = db.collection('files')
       const allFiles = await files.find({}).toArray()
       

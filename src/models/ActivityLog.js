@@ -6,7 +6,7 @@ import { ObjectId } from 'mongodb'
 export class ActivityLog {
   static async create(logData) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const activityLogs = db.collection('activity_logs')
     
     const newLog = {
@@ -46,7 +46,7 @@ export class ActivityLog {
   // Enhanced getRecentActivities with location support
  static async getRecentActivities(limit = 50, filters = {}) {
   const client = await clientPromise
-  const db = client.db('incident-reporting-db')
+  const db = client.db('ir-app-opalquality')
   const activityLogs = db.collection('activity_logs')
   
   // Build query with enhanced location filtering
@@ -105,7 +105,7 @@ export class ActivityLog {
 // NEW: Enhanced getTopActiveUsers with location data
 static async getTopActiveUsers(limit = 10, timeRange = '24h') {
   const client = await clientPromise
-  const db = client.db('incident-reporting-db')
+  const db = client.db('ir-app-opalquality')
   const activityLogs = db.collection('activity_logs')
   
   // Calculate time range
@@ -195,7 +195,7 @@ static async getTopActiveUsers(limit = 10, timeRange = '24h') {
 // NEW: Get comprehensive location statistics
 static async getLocationStats(timeRange = '24h') {
   const client = await clientPromise
-  const db = client.db('incident-reporting-db')
+  const db = client.db('ir-app-opalquality')
   const activityLogs = db.collection('activity_logs')
   
   // Calculate time range
@@ -344,7 +344,7 @@ static async getLocationStats(timeRange = '24h') {
 // NEW: Find activities within a specific geographic area
 static async getActivitiesInArea(centerLat, centerLon, radiusKm, timeRange = '24h') {
   const client = await clientPromise
-  const db = client.db('incident-reporting-db')
+  const db = client.db('ir-app-opalquality')
   const activityLogs = db.collection('activity_logs')
   
   const now = new Date()
@@ -388,7 +388,7 @@ static async getActivitiesInArea(centerLat, centerLon, radiusKm, timeRange = '24
 // NEW: Get location trends over time
 static async getLocationTrends(timeRange = '7d', interval = 'day') {
   const client = await clientPromise
-  const db = client.db('incident-reporting-db')
+  const db = client.db('ir-app-opalquality')
   const activityLogs = db.collection('activity_logs')
   
   const now = new Date()
@@ -461,7 +461,7 @@ static async getLocationTrends(timeRange = '7d', interval = 'day') {
   // NEW: Get activities by location
   static async getActivitiesByLocation(city, limit = 20) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const activityLogs = db.collection('activity_logs')
     
     return await activityLogs
@@ -477,7 +477,7 @@ static async getLocationTrends(timeRange = '7d', interval = 'day') {
   // NEW: Get location statistics
   static async getLocationStats(timeRange = '24h') {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const activityLogs = db.collection('activity_logs')
     
     // Calculate time range
@@ -566,7 +566,7 @@ static async getLocationTrends(timeRange = '7d', interval = 'day') {
   // NEW: Find users in specific geographic area
   static async getUsersInArea(centerLat, centerLon, radiusKm, timeRange = '24h') {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const activityLogs = db.collection('activity_logs')
     
     const now = new Date()
@@ -618,7 +618,7 @@ static async getLocationTrends(timeRange = '7d', interval = 'day') {
   // Keep all existing methods from the original file...
   static async getActivityStats(timeRange = '24h') {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const activityLogs = db.collection('activity_logs')
     
     // Calculate time range
@@ -697,7 +697,7 @@ static async getLocationTrends(timeRange = '7d', interval = 'day') {
   
   static async getTopActiveUsers(limit = 10, timeRange = '24h') {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const activityLogs = db.collection('activity_logs')
     
     // Calculate time range
@@ -756,7 +756,7 @@ static async getLocationTrends(timeRange = '7d', interval = 'day') {
   
   static async getUserActivity(userId, limit = 100, options = {}) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const activityLogs = db.collection('activity_logs')
     
     const query = { userId: new ObjectId(userId) }

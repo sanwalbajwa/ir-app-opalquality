@@ -6,7 +6,7 @@ import { ObjectId } from 'mongodb'
 export class Incident {
   static async create(incidentData) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     // Generate unique incident ID
@@ -88,7 +88,7 @@ export class Incident {
   
   static async findById(id) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     const incident = await incidents.findOne({ _id: new ObjectId(id) })
@@ -109,7 +109,7 @@ export class Incident {
   
   static async findByGuard(guardId, limit = 10) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     console.log('Searching for incidents with guardId:', guardId)
@@ -148,7 +148,7 @@ export class Incident {
   
   static async findByClient(clientId, limit = 10) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     return await incidents
@@ -160,7 +160,7 @@ export class Incident {
   
   static async updateIncident(id, updateData) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     // FIXED: Properly handle police fields in updates too
@@ -220,7 +220,7 @@ export class Incident {
   
   static async getAllIncidents(page = 1, limit = 20) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     const skip = (page - 1) * limit

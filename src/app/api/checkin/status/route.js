@@ -23,7 +23,7 @@ export async function GET() {
       console.log('No active shift found. Checking all checkins...')
       
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const checkins = db.collection('checkins')
       
       const allActiveShifts = await checkins.find({ checkOutTime: null }).toArray()

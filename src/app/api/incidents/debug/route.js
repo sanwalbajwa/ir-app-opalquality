@@ -10,7 +10,7 @@ export async function GET() {
     }
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const incidents = db.collection('incidents')
     
     // Get all incidents

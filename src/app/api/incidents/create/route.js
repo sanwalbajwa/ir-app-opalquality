@@ -67,7 +67,7 @@ export async function POST(request) {
     if (incidentData.recipientType === 'group') {
       // Group-based selection: get all users from selected groups
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const users = db.collection('users')
       
       for (const groupRole of incidentData.recipientGroups) {
@@ -99,7 +99,7 @@ export async function POST(request) {
     } else {
       // Individual selection: get specific users
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const users = db.collection('users')
       
       for (const recipientId of incidentData.recipientIds) {

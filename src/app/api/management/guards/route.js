@@ -19,7 +19,7 @@ export async function GET() {
     }
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     const checkins = db.collection('checkins')
     
@@ -106,7 +106,7 @@ export async function POST(request) {
     
     // Verify guard exists
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     const checkins = db.collection('checkins')
     
@@ -235,7 +235,7 @@ export async function DELETE(request) {
     }
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const users = db.collection('users')
     const checkins = db.collection('checkins')
     

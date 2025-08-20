@@ -16,7 +16,7 @@ export class File {
       })
       
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const files = db.collection('files')
       
       const newFile = {
@@ -38,7 +38,7 @@ export class File {
   static async findByPath(filePath) {
     try {
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const files = db.collection('files')
       
       console.log('Looking for file with path:', filePath)
@@ -55,7 +55,7 @@ export class File {
   static async findById(id) {
     try {
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const files = db.collection('files')
       
       return await files.findOne({ _id: new ObjectId(id) })
@@ -68,7 +68,7 @@ export class File {
   static async deleteByPath(filePath) {
     try {
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const files = db.collection('files')
       
       return await files.deleteOne({ filePath })

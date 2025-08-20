@@ -6,7 +6,7 @@ import { ObjectId } from 'mongodb'
 export class CheckIn {
   static async startShift(guardId, guardName, guardEmail, location = null, notes = '', locationData = null) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     // Check if guard already has an active shift
@@ -63,7 +63,7 @@ export class CheckIn {
   
   static async endShift(guardId, notes = '', locationData = null) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     console.log('=== END SHIFT DEBUG WITH LOCATION ===')
@@ -149,7 +149,7 @@ export class CheckIn {
     console.log('Looking for active shift for guard:', guardId)
     
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     console.log('guardId type:', typeof guardId)
@@ -180,7 +180,7 @@ export class CheckIn {
   
   static async getShiftHistory(guardId, limit = 10) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     // Convert to ObjectId
@@ -196,7 +196,7 @@ export class CheckIn {
   // NEW: Get shifts with location analysis
   static async getShiftHistoryWithLocation(guardId, limit = 10) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     const guardObjectId = new ObjectId(guardId)
@@ -278,7 +278,7 @@ export class CheckIn {
     
     try {
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const checkins = db.collection('checkins')
       
       const updateQuery = {
@@ -325,7 +325,7 @@ export class CheckIn {
   // Add new break management methods with location support
   static async startBreak(guardId, breakType = 'break', locationData = null) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     // Find active shift
@@ -381,7 +381,7 @@ export class CheckIn {
   
   static async endBreak(guardId, locationData = null) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     const activeShift = await checkins.findOne({
@@ -432,7 +432,7 @@ export class CheckIn {
   
   static async getBreakStatus(guardId) {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     const activeShift = await checkins.findOne({
@@ -450,7 +450,7 @@ export class CheckIn {
   // NEW: Get location statistics for shifts
   static async getLocationStats(timeRange = '30d') {
     const client = await clientPromise
-    const db = client.db('incident-reporting-db')
+    const db = client.db('ir-app-opalquality')
     const checkins = db.collection('checkins')
     
     // Calculate time range

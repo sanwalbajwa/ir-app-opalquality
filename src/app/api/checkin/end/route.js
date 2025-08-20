@@ -31,7 +31,7 @@ export async function POST(request) {
     } catch (error) {
       // Fallback logic with location tracking
       const client = await clientPromise
-      const db = client.db('incident-reporting-db')
+      const db = client.db('ir-app-opalquality')
       const checkins = db.collection('checkins')
       
       const activeShift = await checkins.findOne({
