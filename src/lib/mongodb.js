@@ -2,17 +2,20 @@ import { MongoClient } from 'mongodb'
 
 const uri = process.env.MONGODB_URI
 
+if (!uri) {
+  throw new Error('Please add your Mongo URI to environment variables')
+}
+
 const options = {
-  // Force disable SSL for Vercel compatibility
-  ssl: false,
-  tls: false,
-  serverSelectionTimeoutMS: 5000,
+  serverSelectionTimeoutMS: 10000,
   socketTimeoutMS: 45000,
-  connectTimeoutMS: 10000,
+  family: 4, // Use IPv4, skip trying IPv6
   maxPoolSize: 10,
-  family: 4,
-  retryWrites: true,
-  w: 'majority'
+  serverApi: {
+    version: '1',
+    strict: true,
+    deprecationErrors: true,
+  }
 }
 
 let client
