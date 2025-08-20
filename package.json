@@ -30,8 +30,5 @@
   "repository": {
     "url": "https://github.com/sanwalbajwa/ir-app-opalquality.git"
   },
-  "engines": {
-  "node": "18.x"
-},
   "homepage": "https://github.com/sanwalbajwa/ir-app-opalquality"
 }
