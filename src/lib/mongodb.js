@@ -7,10 +7,15 @@ if (!uri) {
 }
 
 const options = {
-  serverSelectionTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 30000, // Increased from 10000
+  connectTimeoutMS: 60000, // Increased timeout
   socketTimeoutMS: 45000,
-  family: 4, // Use IPv4, skip trying IPv6
   maxPoolSize: 10,
+  retryWrites: true,
+  w: 'majority',
+  
+  // Add these for better Vercel compatibility
+  maxIdleTimeMS: 30000,
   serverApi: {
     version: '1',
     strict: true,
@@ -28,8 +33,12 @@ if (process.env.NODE_ENV === 'development') {
   }
   clientPromise = global._mongoClientPromise
 } else {
+  // In production, create a new client for each request
   client = new MongoClient(uri, options)
   clientPromise = client.connect()
 }
+
+// Add connection test
+clientPromise.catch(console.error)
 
 export default clientPromise
