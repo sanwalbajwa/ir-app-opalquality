@@ -1,3 +1,5 @@
+// src/lib/mongodb.js - Fixed version without conflicting TLS options
+
 import { MongoClient } from 'mongodb'
 
 const uri = process.env.MONGODB_URI
@@ -6,19 +8,8 @@ if (!uri) {
   throw new Error('Please add your Mongo URI to environment variables')
 }
 
-// Aggressive SSL workaround for Vercel
+// Clean options without conflicting TLS settings
 const options = {
-  // Disable SSL verification (not recommended for production, but might work)
-  tls: true,
-  tlsInsecure: true,
-  tlsAllowInvalidCertificates: true,
-  tlsAllowInvalidHostnames: true,
-  
-  // Alternative: try completely disabling SSL
-  // ssl: false,
-  // tls: false,
-  
-  // Connection settings
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
   connectTimeoutMS: 10000,
@@ -28,13 +19,11 @@ const options = {
   family: 4,
   retryWrites: true,
   w: 'majority',
-  
-  // Force older server API that might be more compatible
-  // serverApi: {
-  //   version: '1',
-  //   strict: false,
-  //   deprecationErrors: false,
-  // }
+  serverApi: {
+    version: '1',
+    strict: true,
+    deprecationErrors: true,
+  }
 }
 
 let client
