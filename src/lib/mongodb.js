@@ -7,20 +7,9 @@ if (!uri) {
 }
 
 const options = {
-  serverSelectionTimeoutMS: 30000,
-  connectTimeoutMS: 60000,
-  socketTimeoutMS: 45000,
-  maxPoolSize: 10,
-  retryWrites: true,
-  w: 'majority',
-  maxIdleTimeMS: 30000,
-  tls: true,
-  serverApi: {
-    version: '1',
-    strict: true,
-    deprecationErrors: true
-  }
+  serverApi: { version: '1' }
 }
+
 
 
 let client
