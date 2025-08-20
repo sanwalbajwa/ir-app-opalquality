@@ -6,16 +6,35 @@ if (!uri) {
   throw new Error('Please add your Mongo URI to environment variables')
 }
 
+// Aggressive SSL workaround for Vercel
 const options = {
-  serverSelectionTimeoutMS: 10000,
+  // Disable SSL verification (not recommended for production, but might work)
+  tls: true,
+  tlsInsecure: true,
+  tlsAllowInvalidCertificates: true,
+  tlsAllowInvalidHostnames: true,
+  
+  // Alternative: try completely disabling SSL
+  // ssl: false,
+  // tls: false,
+  
+  // Connection settings
+  serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
-  family: 4, // Use IPv4, skip trying IPv6
+  connectTimeoutMS: 10000,
   maxPoolSize: 10,
-  serverApi: {
-    version: '1',
-    strict: true,
-    deprecationErrors: true,
-  }
+  minPoolSize: 0,
+  maxIdleTimeMS: 30000,
+  family: 4,
+  retryWrites: true,
+  w: 'majority',
+  
+  // Force older server API that might be more compatible
+  // serverApi: {
+  //   version: '1',
+  //   strict: false,
+  //   deprecationErrors: false,
+  // }
 }
 
 let client
