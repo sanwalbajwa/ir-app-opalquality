@@ -72,33 +72,22 @@ export default function Header() {
 
   // Get role display name
   const getRoleDisplay = () => {
-    switch (session.user.role) {
-      // case 'security_supervisor':
-      //   return 'Security Supervisor'
-      case 'management':
-        return 'Management'
-      case 'guard':
-        return 'Security Guard'
-      case 'rover':
-        return 'Rover'
-      default:
-        return session.user.role
+    if (session.user.role === 'management') {
+      return 'Management'
     }
+    
+    // For dynamic roles, you might want to fetch and cache the display name
+    // For now, just capitalize the role name
+    return session.user.role.charAt(0).toUpperCase() + session.user.role.slice(1).replace(/_/g, ' ')
   }
 
   // Get role icon
   const getRoleIcon = () => {
     switch (session.user.role) {
-      // case 'security_supervisor':
-      //   return <Shield className="w-4 h-4" />
       case 'management':
         return <Crown className="w-4 h-4" />
-      case 'guard':
-        return <UserCheck className="w-4 h-4" />
-      case 'rover':
-        return <UserCheck className="w-4 h-4" />
       default:
-        return <User className="w-4 h-4" />
+        return <UserCheck className="w-4 h-4" />
     }
   }
 
@@ -171,6 +160,12 @@ export default function Header() {
         //   icon: Shield,
         //   active: pathname.startsWith('/management/supervisors')
         // },
+        {
+          name: 'User Roles',  // NEW ITEM
+          href: '/management/user-roles',
+          icon: UserCheck,
+          active: pathname.startsWith('/management/user-roles')
+        },
         {
           name: 'Clients',
           href: '/clients',

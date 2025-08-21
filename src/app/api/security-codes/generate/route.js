@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import clientPromise from '@/lib/mongodb'  // CHANGED: Use clientPromise
+import clientPromise from '@/lib/mongodb'
 import { ObjectId } from 'mongodb'
 
 // Generate random security code
 function generateSecurityCode(role) {
   const prefix = 'IR'
-  const rolePart = role.substring(0, 3) // First 3 chars of role
+  const rolePart = role.substring(0, 3).toUpperCase() // First 3 chars of role
   const randomNum = Math.floor(Math.random() * 100).toString().padStart(2, '0')
   const specialChars = '#@'
   
@@ -24,13 +24,38 @@ export async function POST(request) {
 
     const { role } = await request.json()
     
-    if (!role || !['guard', 'rover', 'security_supervisor'].includes(role)) {
-      return NextResponse.json({ error: 'Invalid role' }, { status: 400 })
+    if (!role) {
+      return NextResponse.json({ error: 'Role is required' }, { status: 400 })
     }
 
-    const client = await clientPromise  // CHANGED: Use clientPromise
+    const client = await clientPromise
     const db = client.db('ir-app-opalquality')
     const securityCodes = db.collection('security_codes')
+    const userRoles = db.collection('user_roles')
+    
+    // Validate role - check if it's management or a valid dynamic role
+    let validRole = false
+    let roleDisplayName = role
+
+    if (role === 'management') {
+      validRole = true
+      roleDisplayName = 'Management'
+    } else {
+      // Check if it's a valid dynamic role
+      const dynamicRole = await userRoles.findOne({ 
+        name: role.toLowerCase(),
+        isActive: true 
+      })
+      
+      if (dynamicRole) {
+        validRole = true
+        roleDisplayName = dynamicRole.displayName
+      }
+    }
+
+    if (!validRole) {
+      return NextResponse.json({ error: 'Invalid role selected' }, { status: 400 })
+    }
     
     // Generate unique code
     let code
@@ -54,6 +79,7 @@ export async function POST(request) {
     const securityCode = {
       code,
       role,
+      roleDisplayName, // Store display name for easier reference
       isUsed: false,
       usedBy: null,
       createdBy: new ObjectId(session.user.id),

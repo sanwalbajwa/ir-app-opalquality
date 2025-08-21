@@ -22,9 +22,34 @@ export async function POST(request) {
       )
     }
 
-    // Validate role
-    const validRoles = ['guard', 'rover', 'management']
-    if (!validRoles.includes(role)) {
+    // Connect to database
+    const client = await clientPromise
+    const db = client.db('ir-app-opalquality')
+    const securityCodes = db.collection('security_codes')
+    const userRoles = db.collection('user_roles')
+
+    // Validate role - check if it's management or a valid dynamic role
+    let validRole = false
+    let roleDisplayName = role
+
+    if (role === 'management') {
+      // Management role is always valid
+      validRole = true
+      roleDisplayName = 'Management'
+    } else {
+      // Check if it's a valid dynamic role
+      const dynamicRole = await userRoles.findOne({ 
+        name: role.toLowerCase(),
+        isActive: true 
+      })
+      
+      if (dynamicRole) {
+        validRole = true
+        roleDisplayName = dynamicRole.displayName
+      }
+    }
+
+    if (!validRole) {
       return NextResponse.json(
         { 
           error: 'Invalid role selected',
@@ -33,11 +58,6 @@ export async function POST(request) {
         { status: 400 }
       )
     }
-
-    // Connect to database
-    const client = await clientPromise
-    const db = client.db('ir-app-opalquality')
-    const securityCodes = db.collection('security_codes')
 
     // Validate security code
     const codeDoc = await securityCodes.findOne({ 
@@ -110,7 +130,8 @@ export async function POST(request) {
     return NextResponse.json(
       { 
         message: 'User registered successfully',
-        userId: newUser._id
+        userId: newUser._id,
+        roleDisplayName: roleDisplayName
       },
       { status: 201 }
     )

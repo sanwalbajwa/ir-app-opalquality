@@ -21,6 +21,10 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
+  const [availableRoles, setAvailableRoles] = useState([])
+  const [rolesLoading, setRolesLoading] = useState(true)
+
+
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -29,6 +33,34 @@ export default function RegisterPage() {
       router.push('/dashboard')
     }
   }, [session, status, router])
+
+  // Add this useEffect to load dynamic roles
+useEffect(() => {
+  const loadRoles = async () => {
+    try {
+      setRolesLoading(true)
+      const response = await fetch('/api/management/user-roles')
+      const data = await response.json()
+      
+      console.log('Loaded roles:', data) // Debug log
+      
+      if (response.ok && data.roles) {
+        setAvailableRoles(data.roles)
+        console.log('Available roles set:', data.roles) // Debug log
+      } else {
+        console.error('Failed to load roles:', data)
+        setAvailableRoles([])
+      }
+    } catch (error) {
+      console.error('Error loading roles:', error)
+      setAvailableRoles([])
+    } finally {
+      setRolesLoading(false)
+    }
+  }
+  
+  loadRoles()
+}, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -350,13 +382,27 @@ export default function RegisterPage() {
                 value={formData.role}
                 onChange={handleChange}
                 required
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 ${getFieldErrorStyle('role')}`}
+                disabled={rolesLoading}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 ${getFieldErrorStyle('role')} ${rolesLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <option value="">Select Your Role</option>
-                <option value="guard">Security Guard</option>
-                <option value="rover">Rover</option>
+                <option value="">
+                  {rolesLoading ? 'Loading roles...' : 'Select Your Role'}
+                </option>
                 <option value="management">Management</option>
+                {availableRoles.length > 0 && availableRoles.map((role) => (
+                  <option key={role._id} value={role.name}>
+                    {role.displayName}
+                  </option>
+                ))}
               </select>
+              
+              {/* Debug info - remove this after testing */}
+              {!rolesLoading && (
+                <div className="text-xs text-gray-500 mt-1">
+                  Debug: Found {availableRoles.length} dynamic roles
+                </div>
+              )}
+              
               {errors.role && (
                 <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
                   <AlertCircle className="w-4 h-4" />
@@ -365,17 +411,30 @@ export default function RegisterPage() {
               )}
               
               {/* Role Description */}
-              {formData.role && (
+              {formData.role && formData.role !== 'management' && (
                 <div className="mt-3 p-3 bg-gray-50 rounded-lg border">
                   <div className="flex items-center gap-2 mb-1">
                     {getRoleIcon(formData.role)}
-                    <span className="font-medium text-gray-700 capitalize">{formData.role}</span>
+                    <span className="font-medium text-gray-700 capitalize">
+                      {availableRoles.find(r => r.name === formData.role)?.displayName || formData.role}
+                    </span>
                   </div>
-                  <p className="text-sm text-gray-600">{getRoleDescription(formData.role)}</p>
+                  <p className="text-sm text-gray-600">
+                    {availableRoles.find(r => r.name === formData.role)?.description || getRoleDescription(formData.role)}
+                  </p>
+                </div>
+              )}
+              
+              {formData.role === 'management' && (
+                <div className="mt-3 p-3 bg-gray-50 rounded-lg border">
+                  <div className="flex items-center gap-2 mb-1">
+                    {getRoleIcon(formData.role)}
+                    <span className="font-medium text-gray-700">Management</span>
+                  </div>
+                  <p className="text-sm text-gray-600">Administrative and oversight roles</p>
                 </div>
               )}
             </div>
-
             {/* Security Code Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
