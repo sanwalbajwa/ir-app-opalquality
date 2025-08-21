@@ -36,21 +36,61 @@ export default function SecurityCodesPage() {
     }
   }, [session])
 
-  // Load available roles for code generation
+  // FIXED: Load available roles including management and dynamic roles
   const loadAvailableRoles = async () => {
+    console.log('🔄 Starting to load available roles...')
+    
+    // Always include management role as the first option
+    const allRoles = [
+      { 
+        name: 'management', 
+        displayName: 'Management', 
+        description: 'System administrator with full access',
+        _id: 'management'
+      }
+    ]
+    
+    console.log('✅ Management role added:', allRoles[0])
+    
     try {
-      const response = await fetch('/api/user-roles')
+      console.log('🌐 Fetching dynamic roles from API...')
+      const response = await fetch('/api/management/user-roles')
+      console.log('📡 API Response status:', response.status)
+      
       if (response.ok) {
         const data = await response.json()
-        // Add management role to the list
-        const allRoles = [
-          { name: 'management', displayName: 'Management', description: 'System administrator role' },
-          ...data.roles
-        ]
-        setAvailableRoles(allRoles)
+        console.log('📥 Raw API response:', data)
+        
+        // Add dynamic roles to the list
+        if (data.roles && Array.isArray(data.roles)) {
+          console.log('📋 Dynamic roles found:', data.roles.length)
+          data.roles.forEach((role, index) => {
+            console.log(`  ${index + 1}. ${role.displayName} (${role.name})`)
+          })
+          allRoles.push(...data.roles)
+        } else {
+          console.log('⚠️ No dynamic roles array found in response')
+        }
+      } else {
+        console.error('❌ Failed to load dynamic roles - Status:', response.status)
+        const errorText = await response.text()
+        console.error('❌ Error response:', errorText)
       }
+      
+      console.log('🎯 Final available roles:', allRoles.length)
+      allRoles.forEach((role, index) => {
+        console.log(`  ${index + 1}. ${role.displayName} (${role.name}) - ${role.description}`)
+      })
+      
+      setAvailableRoles(allRoles)
+      console.log('✅ Roles set in state successfully')
+      
     } catch (error) {
-      console.error('Error loading roles:', error)
+      console.error('💥 Error loading roles:', error)
+      
+      // Fallback to just management role if API fails
+      console.log('🔧 Using fallback roles (management only)')
+      setAvailableRoles(allRoles) // allRoles already has management
     }
   }
 
@@ -205,6 +245,10 @@ export default function SecurityCodesPage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Security Codes</h1>
             <p className="text-gray-600 mt-2">Generate and manage registration security codes</p>
+            {/* Debug info - remove in production */}
+            <p className="text-xs text-gray-500 mt-1">
+              Available roles: {availableRoles.length} ({availableRoles.map(r => r.displayName).join(', ')})
+            </p>
           </div>
           
           <button
@@ -232,41 +276,65 @@ export default function SecurityCodesPage() {
               
               {/* Role Options */}
               <div className="space-y-4 mb-8">
-                {availableRoles.map((role) => {
-                  const Icon = role.name === 'management' ? Crown : UserCheck
-                  const gradient = getRoleGradient(role.name)
-                  
-                  return (
+                {/* Show loading state */}
+                {availableRoles.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading available roles...</p>
                     <button
-                      key={role.name}
-                      onClick={() => generateCode(role.name)}
-                      disabled={generating}
-                      className={`w-full p-5 rounded-xl bg-white/70 backdrop-blur-sm border border-white/30 hover:bg-gradient-to-r hover:border-transparent hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group hover:${gradient}`}
+                      onClick={loadAvailableRoles}
+                      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                     >
-                      <div className="flex items-center gap-4">
-                        {/* Icon */}
-                        <div className={`w-12 h-12 bg-gradient-to-br ${gradient} rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-200`}>
-                          <Icon className="w-6 h-6 text-white" />
-                        </div>
-                        
-                        {/* Content */}
-                        <div className="flex-1 text-left">
-                          <h4 className="font-semibold text-gray-900 group-hover:text-white transition-colors duration-200">
-                            {role.displayName}
-                          </h4>
-                          <p className="text-sm text-gray-600 group-hover:text-gray-200 transition-colors duration-200">
-                            {role.description}
-                          </p>
-                        </div>
-                        
-                        {/* Loading spinner */}
-                        {generating && generatingForRole === role.name && (
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        )}
-                      </div>
+                      Retry Loading Roles
                     </button>
-                  )
-                })}
+                  </div>
+                ) : (
+                  <>
+                    {/* Debug info */}
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <p className="text-xs text-blue-700">
+                        Debug: Found {availableRoles.length} role(s): {availableRoles.map(r => r.displayName).join(', ')}
+                      </p>
+                    </div>
+                    
+                    {/* Render roles */}
+                    {availableRoles.map((role) => {
+                      const Icon = role.name === 'management' ? Crown : UserCheck
+                      const gradient = getRoleGradient(role.name)
+                      
+                      return (
+                        <button
+                          key={role.name}
+                          onClick={() => generateCode(role.name)}
+                          disabled={generating}
+                          className={`w-full p-5 rounded-xl bg-white/70 backdrop-blur-sm border border-white/30 hover:bg-gradient-to-r hover:border-transparent hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group hover:${gradient}`}
+                        >
+                          <div className="flex items-center gap-4">
+                            {/* Icon */}
+                            <div className={`w-12 h-12 bg-gradient-to-br ${gradient} rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-200`}>
+                              <Icon className="w-6 h-6 text-white" />
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="flex-1 text-left">
+                              <h4 className="font-semibold text-gray-900 group-hover:text-white transition-colors duration-200">
+                                {role.displayName}
+                              </h4>
+                              <p className="text-sm text-gray-600 group-hover:text-gray-200 transition-colors duration-200">
+                                {role.description}
+                              </p>
+                            </div>
+                            
+                            {/* Loading spinner */}
+                            {generating && generatingForRole === role.name && (
+                              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            )}
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </>
+                )}
               </div>
               
               {/* Cancel Button */}
