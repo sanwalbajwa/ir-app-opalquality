@@ -57,12 +57,12 @@ export default function Header() {
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [showMobileMenu, showUserMenu])
+  
   if (!session) return null
+  
   // Get role-specific dashboard URL
   const getDashboardUrl = () => {
     switch (session.user.role) {
-      // case 'security_supervisor':
-      //   return '/supervisor-dashboard'
       case 'management':
         return '/management-dashboard'
       default:
@@ -76,8 +76,7 @@ export default function Header() {
       return 'Management'
     }
     
-    // For dynamic roles, you might want to fetch and cache the display name
-    // For now, just capitalize the role name
+    // For dynamic roles, capitalize and format nicely
     return session.user.role.charAt(0).toUpperCase() + session.user.role.slice(1).replace(/_/g, ' ')
   }
 
@@ -94,8 +93,6 @@ export default function Header() {
   // Get role color with gradient
   const getRoleGradient = () => {
     switch (session.user.role) {
-      // case 'security_supervisor':
-      //   return 'bg-gradient-to-r from-purple-500 to-purple-600 text-white'
       case 'management':
         return 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
       case 'guard':
@@ -103,49 +100,39 @@ export default function Header() {
       case 'rover':
         return 'bg-gradient-to-r from-green-600 to-green-700 text-white'
       default:
-        return 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
+        // For dynamic roles, use a default gradient
+        return 'bg-gradient-to-r from-purple-600 to-purple-700 text-white'
     }
+  }
+
+  // UPDATED: Check if user role should have guard-like navigation
+  const isGuardLikeRole = (role) => {
+    return ['guard', 'rover'].includes(role) || 
+           (!['management'].includes(role)) // Any role that's not management gets guard-like nav
   }
 
   // Navigation items based on role
   const getNavigationItems = () => {
     const items = []
 
-    if (session.user.role === 'guard' || session.user.role === 'rover') {
-    // Guard and Rover-specific navigation
-    items.push(
-      {
-        name: 'My Reports',
-        href: '/incidents',
-        icon: FileText,
-        active: pathname.startsWith('/incidents') && pathname !== '/incidents/new'
-      },
-      {
-        name: 'Clients',
-        href: '/clients',
-        icon: Building2,
-        active: pathname === '/clients'
-      }
-    )
-  } 
-  // else if (session.user.role === 'security_supervisor') {
-  //     // Supervisor-specific navigation
-  //     items.push(
-  //       {
-  //         name: 'Guards & Rovers',
-  //         href: '/supervisor/guards',
-  //         icon: Users,
-  //         active: pathname.startsWith('/supervisor/guards')
-  //       },
-  //       {
-  //         name: 'Clients',
-  //         href: '/clients',
-  //         icon: Building2,
-  //         active: pathname === '/clients'
-  //       }
-  //     )
-  //   }
-     else if (session.user.role === 'management') {
+    // UPDATED: Include dynamic roles in guard-like navigation
+    if (isGuardLikeRole(session.user.role)) {
+      // Guard, Rover, and Dynamic Role navigation
+      items.push(
+        {
+          name: 'My Reports',
+          href: '/incidents',
+          icon: FileText,
+          active: pathname.startsWith('/incidents') && pathname !== '/incidents/new'
+        },
+        {
+          name: 'Clients',
+          href: '/clients',
+          icon: Building2,
+          active: pathname === '/clients'
+        }
+      )
+    } else if (session.user.role === 'management') {
       // Management-specific navigation
       items.push(
         {
@@ -154,14 +141,8 @@ export default function Header() {
           icon: Users,
           active: pathname.startsWith('/management/guards')
         },
-        // {
-        //   name: 'Supervisors', 
-        //   href: '/management/supervisors',
-        //   icon: Shield,
-        //   active: pathname.startsWith('/management/supervisors')
-        // },
         {
-          name: 'User Roles',  // NEW ITEM
+          name: 'User Roles',
           href: '/management/user-roles',
           icon: UserCheck,
           active: pathname.startsWith('/management/user-roles')
@@ -173,7 +154,7 @@ export default function Header() {
           active: pathname === '/clients'
         },
         {
-          name: 'Security Codes',  // ADD THIS ITEM
+          name: 'Security Codes',
           href: '/management/security-codes',
           icon: Shield,
           active: pathname.startsWith('/management/security-codes')
