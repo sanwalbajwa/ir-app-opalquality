@@ -290,12 +290,6 @@ export default function SecurityCodesPage() {
                   </div>
                 ) : (
                   <>
-                    {/* Debug info */}
-                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                      <p className="text-xs text-blue-700">
-                        Debug: Found {availableRoles.length} role(s): {availableRoles.map(r => r.displayName).join(', ')}
-                      </p>
-                    </div>
                     
                     {/* Render roles */}
                     {availableRoles.map((role) => {
