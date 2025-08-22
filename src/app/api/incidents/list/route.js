@@ -11,8 +11,8 @@ export async function GET(request) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
-    console.log('Session user:', session.user)
-    console.log('Fetching incidents for guard ID:', session.user.id)
+    // console.log('Session user:', session.user)
+    // console.log('Fetching incidents for guard ID:', session.user.id)
     
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')

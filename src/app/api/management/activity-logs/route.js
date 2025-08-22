@@ -34,7 +34,7 @@ export async function GET(request) {
       city: searchParams.get('city') || ''
     }
     
-    console.log('Activity logs filters with location:', filters)
+    // console.log('Activity logs filters with location:', filters)
     
     // Get recent activities with enhanced location filtering
     const activities = await ActivityLog.getRecentActivities(filters.limit, {
