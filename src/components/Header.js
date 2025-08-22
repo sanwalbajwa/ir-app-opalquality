@@ -136,7 +136,7 @@ export default function Header() {
       // Management-specific navigation
       items.push(
         {
-          name: 'Guards & Rovers',
+          name: 'Guards',
           href: '/management/guards',
           icon: Users,
           active: pathname.startsWith('/management/guards')
