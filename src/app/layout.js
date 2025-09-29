@@ -1,4 +1,4 @@
-// layout.js
+// layout.js 
 import { Poppins } from 'next/font/google'
 import './globals.css'
 import AuthSessionProvider from '@/components/SessionProvider'
